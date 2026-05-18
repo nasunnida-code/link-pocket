@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "링크 포켓 (Link Pocket)",
+  "version": "1.0",
+  "description": "우클릭으로 간편하게 링크를 분류하고 저장하는 포켓",
+  "permissions": ["contextMenus", "storage", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
