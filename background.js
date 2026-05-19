@@ -32,7 +32,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (CATEGORIES[info.menuItemId]) {
     const categoryName = CATEGORIES[info.menuItemId];
 
-    // 저장할 데이터 객체 생성 (기획서 명세 반영)
+    // 저장할 데이터 객체 생성
     const newLink = {
       id: Date.now().toString(), // 삭제 시 식별할 고유 ID
       title: tab.title || "제목 없음",
@@ -48,6 +48,26 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
       chrome.storage.local.set({ links: currentLinks }, () => {
         console.log("링크 포켓 저장 완료:", newLink);
+
+        // [추가된 로직] 저장이 성공하면 현재 활성화된 탭(content.js)으로 알림 전송
+        if (tab && tab.id) {
+          chrome.tabs.sendMessage(
+            tab.id,
+            {
+              action: "SHOW_TOAST",
+              category: categoryName,
+            },
+            (response) => {
+              // 콘텐트 스크립트가 로드되지 않은 특수 페이지(크롬 설정 등)에서의 에러 방지
+              if (chrome.runtime.lastError) {
+                console.log(
+                  "알림 전송 실패 (콘텐트 스크립트 미실행 페이지):",
+                  chrome.runtime.lastError.message,
+                );
+              }
+            },
+          );
+        }
       });
     });
   }
