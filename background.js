@@ -6,13 +6,13 @@ const CATEGORIES = {
   cat_etc: "기타",
 };
 
-// 1. 확장 프로그램 설치 시 우클릭 메뉴 생성
+// 1. 확장 프로그램 설치 시 우클릭 메뉴 생성 및 사이드바 설정
 chrome.runtime.onInstalled.addListener(() => {
   // 메인 부모 메뉴 생성
   chrome.contextMenus.create({
     id: "link_pocket_main",
     title: "링크 포켓에 저장",
-    contexts: ["page"],
+    contexts: ["page", "link"], // 페이지 빈 곳 및 링크 위에서도 우클릭 가능하도록 확장
   });
 
   // 자식 카테고리 메뉴 생성
@@ -21,9 +21,14 @@ chrome.runtime.onInstalled.addListener(() => {
       id: id,
       parentId: "link_pocket_main",
       title: title,
-      contexts: ["page"],
+      contexts: ["page", "link"],
     });
   });
+
+  // 툴바 아이콘 클릭 시 팝업 대신 사이드바가 기본으로 열리도록 설정
+  chrome.sidePanel
+    .setPanelBehavior({ openPanelOnActionClick: true })
+    .catch((error) => console.error("사이드바 설정 실패:", error));
 });
 
 // 2. 우클릭 메뉴 클릭 이벤트 리스너
@@ -32,11 +37,15 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (CATEGORIES[info.menuItemId]) {
     const categoryName = CATEGORIES[info.menuItemId];
 
+    // 우클릭한 대상이 링크라면 해당 링크 주소를, 아니라면 현재 페이지 주소를 사용
+    const linkUrl = info.linkUrl || info.pageUrl;
+    const linkTitle = tab.title || "제목 없음";
+
     // 저장할 데이터 객체 생성
     const newLink = {
       id: Date.now().toString(), // 삭제 시 식별할 고유 ID
-      title: tab.title || "제목 없음",
-      url: tab.url,
+      title: linkTitle,
+      url: linkUrl,
       category: categoryName,
       date: new Date().toLocaleDateString(),
     };
@@ -49,7 +58,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       chrome.storage.local.set({ links: currentLinks }, () => {
         console.log("링크 포켓 저장 완료:", newLink);
 
-        // [추가된 로직] 저장이 성공하면 현재 활성화된 탭(content.js)으로 알림 전송
+        // 저장이 성공하면 현재 활성화된 탭(content.js)으로 알림 전송
         if (tab && tab.id) {
           chrome.tabs.sendMessage(
             tab.id,
@@ -71,4 +80,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       });
     });
   }
+});
+
+// 3. 확장 프로그램 툴바 아이콘 클릭 시 사이드바 토글 오픈
+chrome.action.onClicked.addListener((tab) => {
+  chrome.sidePanel.open({ tabId: tab.id });
 });

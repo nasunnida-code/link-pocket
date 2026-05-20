@@ -1,0 +1,110 @@
+/* 기본 레이아웃 및 초기화 */
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 15px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 제목 스타일 */
+h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 8px;
+  flex-shrink: 0;
+}
+
+/* 탭 메뉴 */
+.tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 4px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+  font-weight: bold;
+}
+
+/* 링크 리스트 영역 (사이드바 높이에 맞춰 유연하게 늘어남) */
+.link-list {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 개별 링크 아이템 */
+.link-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.link-info {
+  width: 85%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link-info a {
+  color: #333;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.link-info a:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0 5px;
+}
+
+.delete-btn:hover {
+  color: #bd2130;
+}
+
+/* 데이터가 없을 때 메시지 */
+.empty-msg {
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+  padding: 40px 0;
+}

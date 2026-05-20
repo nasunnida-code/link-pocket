@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "링크 포켓 (Link Pocket)",
   "version": "1.0",
-  "description": "우클릭으로 간편하게 링크를 분류하고 저장하는 포켓",
-  "permissions": ["contextMenus", "storage", "tabs"],
+  "description": "우클릭으로 간편하게 링크를 분류하고 저장하는 포켓 (사이드바 버전)",
+  "permissions": ["contextMenus", "storage", "tabs", "sidePanel"],
   "background": {
     "service_worker": "background.js"
   },
@@ -13,7 +13,16 @@
       "js": ["content.js"]
     }
   ],
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
   "action": {
-    "default_popup": "popup.html"
+    "default_title": "링크 포켓 열기",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
   }
 }
