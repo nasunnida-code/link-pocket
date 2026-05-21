@@ -10,13 +10,37 @@
     <h2>📂 링크 포켓 (Link Pocket)</h2>
 
     <div class="tabs">
-      <button class="tab-btn active" data-category="개발/정보">개발</button>
+      <button class="tab-btn active" data-category="관심/정보">관심</button>
       <button class="tab-btn" data-category="뉴스">뉴스</button>
       <button class="tab-btn" data-category="쇼핑">쇼핑</button>
       <button class="tab-btn" data-category="기타">기타</button>
     </div>
 
     <ul id="linkList" class="link-list"></ul>
+
+    <!-- ─── 여기서부터 월별 다이어리 추가 ─── -->
+    <hr class="section-divider" />
+
+    <div class="diary-section">
+      <h3>📅 월별 다이어리</h3>
+
+      <!-- 월 선택 컨트롤러 -->
+      <div class="diary-header">
+        <button id="prevMonthBtn">◀</button>
+        <span id="currentMonthLabel">2026년 5월</span>
+        <button id="nextMonthBtn">▶</button>
+      </div>
+
+      <!-- 간단한 메모 작성 영역 -->
+      <div class="diary-body">
+        <textarea
+          id="diaryMemo"
+          placeholder="이달의 목표나 메모를 적어보세요..."
+        ></textarea>
+        <button id="saveDiaryBtn" class="save-btn">저장하기</button>
+      </div>
+    </div>
+    <!-- ─── 여기까지 월별 다이어리 추가 ─── -->
 
     <script src="sidebar.js"></script>
   </body>

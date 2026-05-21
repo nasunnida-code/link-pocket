@@ -1,4 +1,4 @@
-let currentCategory = "개발/정보";
+let currentCategory = "관심";
 
 // 팝업이 열릴 때 데이터 로드
 document.addEventListener("DOMContentLoaded", () => {
@@ -67,6 +67,79 @@ function deleteLink(id) {
     });
   });
 }
+
+// ─── 월별 다이어리 기능 로직 ───
+let currentDate = new Date();
+
+const monthLabel = document.getElementById("currentMonthLabel");
+const diaryMemo = document.getElementById("diaryMemo");
+const prevBtn = document.getElementById("prevMonthBtn");
+const nextBtn = document.getElementById("nextMonthBtn");
+const saveBtn = document.getElementById("saveDiaryBtn");
+
+// 화면에 현재 연도와 월을 표시하고 저장된 메모를 불러오는 함수
+function updateDiaryView() {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // 0부터 시작하므로 +1
+
+  if (monthLabel) {
+    monthLabel.textContent = `${year}년 ${month}월`;
+  }
+
+  // 스토리지 키 생성 (예: "diary_2026_5")
+  const storageKey = `diary_${year}_${month}`;
+
+  // 크롬 확장 프로그램 환경(chrome.storage)인지 일반 웹(localStorage)인지 체크 후 로드
+  if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get([storageKey], (result) => {
+      if (diaryMemo) diaryMemo.value = result[storageKey] || "";
+    });
+  } else {
+    if (diaryMemo) diaryMemo.value = localStorage.getItem(storageKey) || "";
+  }
+}
+
+// 이전달 이동 버튼 이벤트
+if (prevBtn) {
+  prevBtn.addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    updateDiaryView();
+  });
+}
+
+// 다음달 이동 버튼 이벤트
+if (nextBtn) {
+  nextBtn.addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    updateDiaryView();
+  });
+}
+
+// 메모 저장하기 버튼 이벤트
+if (saveBtn) {
+  saveBtn.addEventListener("click", () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    const storageKey = `diary_${year}_${month}`;
+    const text = diaryMemo ? diaryMemo.value : "";
+
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.local
+    ) {
+      chrome.storage.local.set({ [storageKey]: text }, () => {
+        alert("메모가 저장되었습니다!");
+      });
+    } else {
+      localStorage.setItem(storageKey, text);
+      alert("메모가 저장되었습니다!");
+    }
+  });
+}
+
+// 최초 실행 시 다이어리 데이터 불러오기
+updateDiaryView();
 
 /*
 🚀 크롬 브라우저에서 테스트 및 실행 방법

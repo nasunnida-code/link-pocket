@@ -1,6 +1,6 @@
 // 카테고리 정의
 const CATEGORIES = {
-  cat_dev: "개발/정보",
+  cat_dev: "관심/정보",
   cat_news: "뉴스",
   cat_shop: "쇼핑",
   cat_etc: "기타",
